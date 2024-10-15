@@ -6,13 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
-    var fullName by mutableStateOf("")
+    var email by mutableStateOf("")
         private set
     var password by mutableStateOf("")
         private set
 
-    fun onFullNameChange(newName: String) {
-        fullName = newName
+    fun onEmailChange(newEmail: String) {
+        email = newEmail
     }
 
     fun onPasswordChange(newPassword: String) {
@@ -20,6 +20,6 @@ class LoginViewModel : ViewModel() {
     }
 
     fun validateLogin(): Boolean {
-        return fullName.isNotBlank() && password.isNotBlank()
+        return email.isNotBlank() && password.isNotBlank()
     }
 }
