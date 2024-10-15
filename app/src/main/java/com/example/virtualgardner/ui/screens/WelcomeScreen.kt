@@ -22,7 +22,7 @@ fun WelcomeScreen(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
-    val backgroundImage = painterResource(id = R.drawable.welcomescreenbackgroundimage2)
+    val backgroundImage = painterResource(id = R.drawable.launchingpage)
     Box(modifier = Modifier.fillMaxSize()) {
         // Background image
         Image(

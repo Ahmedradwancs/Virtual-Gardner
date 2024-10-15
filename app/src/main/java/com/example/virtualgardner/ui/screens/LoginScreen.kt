@@ -58,10 +58,10 @@ fun LoginScreen(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Column(){
-                Text("Welcome Back", color = OffWhite, style = MaterialTheme.typography.titleLarge)
+                Text("Welcome Back", color = OffWhite, style = MaterialTheme.typography.displayMedium)
                 Text(
                     "Login to your account",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleLarge,
                     color = OffBlack
                 )
             }
