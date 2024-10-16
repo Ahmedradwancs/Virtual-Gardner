@@ -40,4 +40,11 @@ class LoginViewModel : ViewModel() {
                 }
             }
     }
+
+    // Firebase sign-out process
+    fun logout(auth: FirebaseAuth, onLogoutSuccess: () -> Unit) {
+        auth.signOut() // This signs out the current user from Firebase
+        onLogoutSuccess() // After signing out, call this to navigate to login
+    }
+
 }

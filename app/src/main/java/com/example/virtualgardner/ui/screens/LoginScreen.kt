@@ -1,5 +1,8 @@
 package com.example.virtualgardner.ui.screens
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,6 +13,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -62,7 +67,9 @@ fun LoginScreen(
                     onValueChange = { loginViewModel.onEmailChange(it) },
                     label = { Text("Email") },
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next),
                     trailingIcon = {
                         Icon(imageVector = Icons.Filled.Email, contentDescription = null)
                     }
@@ -83,7 +90,11 @@ fun LoginScreen(
                             Icon(imageVector = icon, contentDescription = null)
                         }
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+
+                        )
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -92,29 +103,27 @@ fun LoginScreen(
                     Text("Forgot Password?", color = OffBlack)
                 }
             }
-
-            if (errorMessage != null) {
-                Text(errorMessage!!, color = MaterialTheme.colorScheme.error)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val context = LocalContext.current
                 // Login Button
                 Button(
                     onClick = {
-                        if (loginViewModel.validateLogin()) {
+                       if (loginViewModel.validateLogin()) {
                             loginViewModel.loginWithEmail(auth) { success, message ->
                                 if (success) {
                                     onLoginClick()
                                 } else {
-                                    errorMessage = message
+                                    Log.w(TAG, "signInWithEmail:failure", Exception(message))
+                                    errorMessage = message ?: "An error occurred"
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } else {
                             errorMessage = "Please fill in both fields."
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),

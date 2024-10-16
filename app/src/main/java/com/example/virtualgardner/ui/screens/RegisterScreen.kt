@@ -1,5 +1,8 @@
 package com.example.virtualgardner.ui.screens
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +18,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -83,30 +88,32 @@ fun RegisterScreen(
                 )
             }
             item { UserTextField(signUpViewModel.phoneNumber, { signUpViewModel.onPhoneNumberChange(it) }, "Phone Number", Icons.Filled.Phone, keyboardType = KeyboardType.Phone) }
-            item { PasswordTextField(signUpViewModel.password, { signUpViewModel.onPasswordChange(it) }, passwordVisible) { passwordVisible = !passwordVisible } }
-            item { PasswordTextField(signUpViewModel.confirmPassword, { signUpViewModel.onConfirmPasswordChange(it) }, confirmPasswordVisible) { confirmPasswordVisible = !confirmPasswordVisible } }
+            item { PasswordTextField(signUpViewModel.password, ImeAction.Next,  { signUpViewModel.onPasswordChange(it) }, passwordVisible) { passwordVisible = !passwordVisible }}
+            item { PasswordTextField(signUpViewModel.confirmPassword, ImeAction.Done, { signUpViewModel.onConfirmPasswordChange(it) }, confirmPasswordVisible) { confirmPasswordVisible = !confirmPasswordVisible }}
             item {
+                val context = LocalContext.current
                 Button(
                     onClick = {
-                        signUpViewModel.signUpWithEmail(auth) { success, message ->
-                            if (success) {
-                                onSignUpClick()
-                            } else {
-                                errorMessage = message ?: "Unknown error"
-                            }
+                        if (signUpViewModel.validateSignUp()) {
+                            auth.createUserWithEmailAndPassword(signUpViewModel.email, signUpViewModel.password)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        onSignUpClick()
+                                    } else {
+                                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                                        errorMessage = task.exception?.message ?: "An error occurred"
+                                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                        } else {
+                            errorMessage = "Please fill in all fields correctly."
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(BtnColor)
                 ) {
                     Text("Sign Up")
-                }
-            }
-
-            // Show error message if any
-            if (errorMessage.isNotBlank()) {
-                item {
-                    Text(errorMessage, color = MaterialTheme.colorScheme.error)
                 }
             }
         }
@@ -136,7 +143,11 @@ fun UserTextField(value: String, onValueChange: (String) -> Unit, label: String,
         onValueChange = onValueChange,
         label = { Text(label) },
         modifier = Modifier.fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = ImeAction.Next,
+
+        ),
         trailingIcon = {
             Icon(imageVector = icon, contentDescription = null)
         }
@@ -144,14 +155,17 @@ fun UserTextField(value: String, onValueChange: (String) -> Unit, label: String,
 }
 
 @Composable
-fun PasswordTextField(value: String, onValueChange: (String) -> Unit, isVisible: Boolean, onVisibilityToggle: () -> Unit) {
+fun PasswordTextField(value: String, keyboaardBtn : ImeAction, onValueChange: (String) -> Unit, isVisible: Boolean, onVisibilityToggle: () -> Unit) {
     TextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text("Password") },
         modifier = Modifier.fillMaxWidth(),
         visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = keyboaardBtn
+        ),
         trailingIcon = {
             IconButton(onClick = onVisibilityToggle) {
                 Icon(
