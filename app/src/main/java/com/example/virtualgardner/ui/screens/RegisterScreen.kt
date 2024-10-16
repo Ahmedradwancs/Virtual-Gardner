@@ -27,17 +27,20 @@ import com.example.virtualgardner.ui.theme.BtnColor
 import com.example.virtualgardner.ui.theme.gradient
 import com.example.virtualgardner.ui.theme.OffWhite
 import com.example.virtualgardner.ui.viewmodels.SignUpViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RegisterScreen(
     signUpViewModel: SignUpViewModel = viewModel(),
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    auth: FirebaseAuth, // Pass FirebaseAuth instance
 ) {
     var mExpanded by remember { mutableStateOf(false) } // for DropdownMenu state
     var passwordVisible by remember { mutableStateOf(false) } // visibility state for password
     var confirmPasswordVisible by remember { mutableStateOf(false) } // visibility state for confirm password
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) } // for DropdownMenu width
     val gardenTypes = listOf("Indoor", "Outdoor", "Green House") // garden types list
+    var errorMessage by remember { mutableStateOf("") } // To store any error messages
 
     Box(
         modifier = Modifier
@@ -85,16 +88,25 @@ fun RegisterScreen(
             item {
                 Button(
                     onClick = {
-                        if (signUpViewModel.validateSignUp()) {
-                            onSignUpClick()
-                        } else {
-                            // Handle validation error, e.g., show a Snackbar
+                        signUpViewModel.signUpWithEmail(auth) { success, message ->
+                            if (success) {
+                                onSignUpClick()
+                            } else {
+                                errorMessage = message ?: "Unknown error"
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(BtnColor)
                 ) {
                     Text("Sign Up")
+                }
+            }
+
+            // Show error message if any
+            if (errorMessage.isNotBlank()) {
+                item {
+                    Text(errorMessage, color = MaterialTheme.colorScheme.error)
                 }
             }
         }
@@ -154,5 +166,5 @@ fun PasswordTextField(value: String, onValueChange: (String) -> Unit, isVisible:
 @Preview
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen(onSignUpClick = {})
+    RegisterScreen(onSignUpClick = {}, auth = FirebaseAuth.getInstance())
 }

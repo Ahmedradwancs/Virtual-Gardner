@@ -15,17 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.virtualgardner.ui.MyAppNavHost
 import com.example.virtualgardner.ui.theme.VirtualGardnerTheme
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+
         setContent {
-            VirtualGardnerTheme {
-                Surface(color = MaterialTheme.colorScheme.background) {
-                    MyAppNavHost()
-                }
-            }
+            MyAppNavHost(
+                startDestination = if (currentUser != null) "dashboard" else "login",
+                auth = auth
+            )
         }
     }
 }

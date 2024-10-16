@@ -7,12 +7,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.virtualgardner.ui.screens.LoginScreen
 import com.example.virtualgardner.ui.screens.RegisterScreen
 import com.example.virtualgardner.ui.screens.WelcomeScreen
+import com.example.virtualgardner.ui.screens.HomeScreen
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun MyAppNavHost() {
+fun MyAppNavHost(
+    startDestination: String,
+    auth: FirebaseAuth
+) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = "welcome") {
+    NavHost(navController, startDestination = startDestination) {
         composable("welcome") {
             WelcomeScreen(
                 onSignInClick = { navController.navigate("login") },
@@ -21,15 +26,22 @@ fun MyAppNavHost() {
         }
         composable("login") {
             LoginScreen(
+                auth = auth,
                 onLoginClick = { navController.navigate("home") },
                 onForgotPasswordClick = { /* Handle forgot password */ },
-                onSignUpClick = { navController.navigate("register") }
+                onSignUpClick = { navController.navigate("register")}
+
             )
         }
         composable("register") {
             RegisterScreen(
-                onSignUpClick = { navController.navigate("login") }
+                onSignUpClick = { navController.navigate("home") },
+                auth = auth
             )
+        }
+
+        composable("home") {
+            HomeScreen()
         }
     }
 }
