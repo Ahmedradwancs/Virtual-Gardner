@@ -27,7 +27,8 @@ fun MyAppNavHost(
         composable("login") {
             LoginScreen(
                 auth = auth,
-                onLoginClick = { navController.navigate("home"){popUpTo("login"){
+                onLoginClick = { navController.navigate("home"){
+                    popUpTo("welcome"){
                     inclusive = true
                 }} },
                 onForgotPasswordClick = { /* Handle forgot password */ },
@@ -37,7 +38,11 @@ fun MyAppNavHost(
         }
         composable("register") {
             RegisterScreen(
-                onSignUpClick = { navController.navigate("home") },
+                onSignUpClick = { navController.navigate("home"){
+                    popUpTo("welcome"){
+                        inclusive = true
+                    }
+                } },
                 auth = auth
             )
         }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.VirtualGardner" parent="android:Theme.Material.Light.NoActionBar" >
+    <style name="Theme.VirtualGardner" parent="android:Theme.Material.Light.NoActionBar"  />
+    <!-- Splash screen theme with the background image -->
+    <style name="Theme.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/launchingpage</item>
     </style>
 </resources>
