@@ -38,7 +38,7 @@ fun HomePage() {
 
             // Image
             Image(
-                painter = painterResource(id = R.drawable.your_image),  // Replace with your actual image resource
+                painter = painterResource(id = R.drawable.icon1),  // Replace with your actual image resource
                 contentDescription = "Dashboard Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
