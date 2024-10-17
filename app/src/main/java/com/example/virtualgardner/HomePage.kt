@@ -1,110 +1,124 @@
 package com.example.virtualgardner
 
-
-
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.virtualgardner.R
-import com.example.virtualgardner.ui.theme.VirtualGardnerTheme
+import java.text.SimpleDateFormat
+import java.util.*
 
-@Composable
-fun HomePage() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+class HomePage : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            HomePageContent(
+                onMoistureClick = {
+                    startActivity(Intent(this, MoistureStatusActivity::class.java))
+                },
+                onSmellDataClick = {
+                    startActivity(Intent(this, SmellDataActivity::class.java))
+                },
+                onEnvironmentalClick = {
+                    startActivity(Intent(this, EnvironmentalStatusActivity::class.java))
+                },
+                onLocationClick = {
+                    startActivity(Intent(this, LocationStatusActivity::class.java))
+                }
+            )
+        }
+    }
+
+    @Composable
+    fun HomePageContent(
+        onMoistureClick: () -> Unit,
+        onSmellDataClick: () -> Unit,
+        onEnvironmentalClick: () -> Unit,
+        onLocationClick: () -> Unit
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header: User Dashboard
             Text(
-                text = "User Dashboard",
-                fontSize = 28.sp,
+                text = "Welcome to Virtual Gardner",
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
-            // Image
-            Image(
-                painter = painterResource(id = R.drawable.icon1),  // Replace with your actual image resource
-                contentDescription = "Dashboard Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-
-            // Welcome text
+            val currentDate = SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault()).format(Date())
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Welcome to Virtual Gardener",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            // Date and time
-            Text(
-                text = "Today 14 Oct 2024 13:00 pm",
-                fontSize = 18.sp,
-                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            // Additional Information text
-            Text(
-                text = "Ready to nurture your garden today? Stay updated with real-time sensor data and weather alerts to keep your plants thriving.",
+                text = "Today: $currentDate",
                 fontSize = 16.sp,
-                modifier = Modifier.padding(16.dp)
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
-            // Statuses/Buttons (Moisture, Smell, etc.)
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                StatusButton("Moisture Status")
-                StatusButton("Smell Data")
-            }
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
-            ) {
-                StatusButton("Environmental Status")
-                StatusButton("Location Status")
-            }
+            // Card for "Moisture Status"
+            StatusSection(
+                title = "Moisture Status",
+                imageResId = R.drawable.icon1,
+                onClick = onMoistureClick
+            )
+
+            // Card for "Smell Data"
+            StatusSection(
+                title = "Smell Data",
+                imageResId = R.drawable.smart,
+                onClick = onSmellDataClick
+            )
+
+            // Card for "Environmental Status"
+            StatusSection(
+                title = "Environmental Status",
+                imageResId = R.drawable.icon3,
+                onClick = onEnvironmentalClick
+            )
+
+            // Card for "Location Status"
+            StatusSection(
+                title = "Location Status",
+                imageResId = R.drawable.icon4,
+                onClick = onLocationClick
+            )
         }
     }
-}
 
-@Composable
-fun StatusButton(text: String) {
-    Button(
-        onClick = { /* TODO: Handle click */ },
-        shape = CircleShape,
-        modifier = Modifier.size(100.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Green)  // Customize colors
-    ) {
-        Text(text = text, fontSize = 14.sp, color = Color.White)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomePagePreview() {
-    VirtualGardnerTheme {
-        HomePage()
+    @Composable
+    fun StatusSection(title: String, imageResId: Int, onClick: () -> Unit) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable { onClick() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = title,
+                modifier = Modifier.size(64.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = title, fontSize = 18.sp)
+        }
     }
 }

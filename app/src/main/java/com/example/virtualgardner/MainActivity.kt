@@ -1,42 +1,47 @@
 package com.example.virtualgardner
-import com.example.virtualgardner.HomePage
+
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.virtualgardner.ui.theme.VirtualGardnerTheme
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            VirtualGardnerTheme {
-                HomePage()
+            MainActivityContent()
+        }
+    }
+
+    @Composable
+    fun MainActivityContent() {
+        // A button that navigates to the HomePage.kt
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Button(
+                onClick = {
+                    startActivity(Intent(this@MainActivity, HomePage::class.java))
+                }
+            ) {
+                Text("Go to Dashboard")
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    VirtualGardnerTheme {
-        Greeting("Android")
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        MainActivityContent()
     }
 }
