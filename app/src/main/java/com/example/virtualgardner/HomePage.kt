@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -101,6 +102,7 @@ class HomePage : ComponentActivity() {
                 text = "Today: $currentDate",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
+                fontStyle = FontStyle.Italic,
                 fontFamily = FontFamily.SansSerif,
                 color = Color(0xFFF5F5DC),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
