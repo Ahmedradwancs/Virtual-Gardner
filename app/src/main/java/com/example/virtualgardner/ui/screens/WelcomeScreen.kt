@@ -60,32 +60,34 @@ fun WelcomeScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(70.dp)) // Fixed height for spacing
 
             Image(
                 painter = painterResource(id = R.drawable.wlecome),
                 contentDescription = "Welcome to Virtual Gardener",
                 modifier = Modifier
-                    .size(width = 343.dp, height = 376.dp)
+                    .fillMaxWidth(0.8f) // 80% of the available width
+                    .aspectRatio(1f) // Aspect ratio 1:1 for circle shape
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(35.dp)) // Fixed height for spacing
 
             Button(
                 onClick = onSignInClick,
                 modifier = Modifier
-                    .size(width = 280.dp, height = 70.dp)
+                    .fillMaxWidth(0.7f) // 70% of available width for buttons
+                    .height(56.dp)
                     .padding(bottom = 16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF3B2314).copy(alpha = 0.5f) // Button with transparency
                 )
             ) {
-                Text("Sign in", fontSize = 24.sp, color = Color(0xFFF5F5DC))
+                Text("Sign in", fontSize = 20.sp, color = Color(0xFFF5F5DC))
             }
 
-            Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(35.dp)) // Fixed height for spacing
 
             Box(
                 modifier = Modifier
@@ -97,12 +99,14 @@ fun WelcomeScreen(
                     text = AnnotatedString("Create an account"),
                     onClick = { onSignUpClick() },
                     style = TextStyle(
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         color = Color(0xFFF5F5DC),
                         textDecoration = TextDecoration.Underline
                     )
                 )
             }
+
+            Spacer(modifier = Modifier.height(70.dp)) // Fixed height for spacing
         }
     }
 }
