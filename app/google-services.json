@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "901153686080",
+    "project_id": "virtual-gardner",
+    "storage_bucket": "virtual-gardner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901153686080:android:9c854b0eff71fab22155a5",
+        "android_client_info": {
+          "package_name": "com.example.virtualgardner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUFCbYH43dGLSP2OIsb9-vEq2psGIHFuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
