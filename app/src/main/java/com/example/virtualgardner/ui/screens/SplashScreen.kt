@@ -24,7 +24,7 @@ fun SplashScreen(onTimeout: () -> Unit) {
 
         // Launch a coroutine to wait for a while before navigating
         LaunchedEffect(Unit) {
-            delay(2000) // 2 seconds delay
+            delay(1000) // 1 seconds delay
             onTimeout() // Navigate to the next screen
         }
     }

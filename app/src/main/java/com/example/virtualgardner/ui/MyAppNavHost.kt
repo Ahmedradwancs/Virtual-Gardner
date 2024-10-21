@@ -4,10 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.virtualgardner.ui.screens.EnvironmentalStatusScreen
+import com.example.virtualgardner.ui.screens.HomePageScreen
+import com.example.virtualgardner.ui.screens.LocationStatusScreen
+import com.example.virtualgardner.ui.screens.MoistureStatusScreen
+import com.example.virtualgardner.ui.screens.SmellDataScreen
 import com.example.virtualgardner.ui.screens.LoginScreen
 import com.example.virtualgardner.ui.screens.RegisterScreen
 import com.example.virtualgardner.ui.screens.WelcomeScreen
-import com.example.virtualgardner.ui.screens.HomeScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -48,10 +52,28 @@ fun MyAppNavHost(
         }
 
         composable("home") {
-            HomeScreen(
-                auth = auth,
-                navController = navController
+            HomePageScreen(
+                onMoistureClick = { navController.navigate("moisture") },
+                onSmellDataClick = { navController.navigate("smell") },
+                onEnvironmentalClick = { navController.navigate("environmental") },
+                onLocationClick = { navController.navigate("location") }
             )
+        }
+
+        composable("environmental") {
+            EnvironmentalStatusScreen()
+        }
+
+        composable("location") {
+            LocationStatusScreen()
+        }
+
+        composable("moisture") {
+            MoistureStatusScreen()
+        }
+
+        composable("smell") {
+            SmellDataScreen()
         }
     }
 }
