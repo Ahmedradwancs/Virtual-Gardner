@@ -21,7 +21,15 @@ fun MyAppNavHost(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = startDestination) {
+    // Define the logout function
+    val onLogoutClick: () -> Unit = {
+        auth.signOut()
+        navController.navigate("welcome") {
+            popUpTo("home") { inclusive = true } // Ensures all screens are removed from the back stack
+        }
+    }
+
+        NavHost(navController, startDestination = startDestination) {
         composable("welcome") {
             WelcomeScreen(
                 onSignInClick = { navController.navigate("login") },
@@ -56,7 +64,8 @@ fun MyAppNavHost(
                 onMoistureClick = { navController.navigate("moisture") },
                 onSmellDataClick = { navController.navigate("smell") },
                 onEnvironmentalClick = { navController.navigate("environmental") },
-                onLocationClick = { navController.navigate("location") }
+                onLocationClick = { navController.navigate("location") },
+                onLogoutClick = onLogoutClick
             )
         }
 
