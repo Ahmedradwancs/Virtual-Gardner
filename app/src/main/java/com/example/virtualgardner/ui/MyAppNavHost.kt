@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.virtualgardner.ui.screens.EnvironmentalStatusScreen
+
 import com.example.virtualgardner.ui.screens.HomePageScreen
 import com.example.virtualgardner.ui.screens.LocationStatusScreen
 import com.example.virtualgardner.ui.screens.MoistureStatusScreen
@@ -13,6 +13,9 @@ import com.example.virtualgardner.ui.screens.LoginScreen
 import com.example.virtualgardner.ui.screens.RegisterScreen
 import com.example.virtualgardner.ui.screens.WelcomeScreen
 import com.google.firebase.auth.FirebaseAuth
+
+import com.example.virtualgardner.ui.screens.PlantMonitoringUI
+
 
 @Composable
 fun MyAppNavHost(
@@ -61,7 +64,7 @@ fun MyAppNavHost(
         }
 
         composable("environmental") {
-            EnvironmentalStatusScreen()
+            PlantMonitoringUI()  // Use this function to show environmental sensor data
         }
 
         composable("location") {

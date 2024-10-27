@@ -24,6 +24,11 @@ class SensorDataViewModel : ViewModel() {
     private val _temperature = MutableStateFlow<String>("Loading...") // Default value of 0 for temperature
     val temperature: StateFlow<String> = _temperature
 
+    //for the location as well
+    private val _location = MutableStateFlow("Fetching location...")
+    val location: StateFlow<String> = _location
+
+
     // OkHttpClient instance to make network requests
     private val client = OkHttpClient()
 
@@ -55,18 +60,27 @@ class SensorDataViewModel : ViewModel() {
                             _humidity.emit(humidityValue.toString())
                             _soil.emit(soilValue.toString())
                             _temperature.emit(temperatureValue.toString())
+
+                            // Location data (dummy data as an example)
+                            _location.emit("Storgatan 96, Kristianstad, Skåne Lan 29526")
                         }
                     } else {
                         // Handle error response
                         _humidity.emit("No data available.")
                         _soil.emit("No data available.")
                         _temperature.emit("No data available.")
+
+                        _location.emit("Location unavailable")
+
+
                     }
                 } catch (e: Exception) {
                     // Handle exceptions during the network request
                     _humidity.emit("Failed to load data.")
                     _soil.emit("Failed to load data.")
                     _temperature.emit("Failed to load data.")
+
+                    _location.emit("Failed to load location data")
                 }
 
 
