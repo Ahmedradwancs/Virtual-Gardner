@@ -2,6 +2,7 @@ package com.example.virtualgardner.ui.screens
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.*
 import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
@@ -178,6 +179,7 @@ private fun connectToDevice(
     }
 
     val gattCallback = object : BluetoothGattCallback() {
+        @SuppressLint("MissingPermission")
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             when (newState) {
                 BluetoothProfile.STATE_CONNECTED -> {
@@ -201,6 +203,7 @@ private fun connectToDevice(
             }
         }
 
+        @SuppressLint("MissingPermission")
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d("SmellDataScreen", "Services discovered on ${device.name}")
@@ -262,6 +265,7 @@ private fun retryConnection(context: Context, device: BluetoothDevice, onDataRec
 }
 
 // Helper function to read a characteristic
+@SuppressLint("MissingPermission")
 private fun readCharacteristic(
     gatt: BluetoothGatt,
     service: BluetoothGattService,
@@ -283,6 +287,7 @@ private fun readCharacteristic(
 }
 
 // Helper function to enable notifications for a characteristic
+@SuppressLint("MissingPermission")
 private fun enableCharacteristicNotification(
     gatt: BluetoothGatt,
     service: BluetoothGattService,
@@ -300,289 +305,3 @@ private fun enableCharacteristicNotification(
 }
 
 
-//Working code for scanning BLE devices
-/*
-import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.bluetooth.le.BluetoothLeScanner
-import android.bluetooth.le.ScanCallback
-import android.bluetooth.le.ScanResult
-import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import com.example.virtualgardner.ui.components.LogoutButton
-
-@Composable
-fun SmellDataScreen(onLogoutClick: () -> Unit) {
-    val context = LocalContext.current
-    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-    val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-    val bluetoothLeScanner: BluetoothLeScanner? = bluetoothAdapter?.bluetoothLeScanner
-
-    // Permissions state
-    var permissionsGranted by remember { mutableStateOf(false) }
-    var permissionsDeniedText by remember { mutableStateOf("") }
-    var scanResults by remember { mutableStateOf(emptyList<String>()) }  // List of discovered devices
-
-    // Request Location permission (required for Bluetooth scanning on Android 10 and below)
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { granted ->
-            permissionsGranted = granted
-            if (!permissionsGranted) {
-                permissionsDeniedText = "Location permission is required to access the smell sensor."
-            } else {
-                startBLEScan(bluetoothLeScanner, context) { result ->
-                    scanResults = scanResults + result  // Append new results to the list
-                }
-            }
-        }
-    )
-
-    LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {  // Android 10 or lower
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            } else {
-                permissionsGranted = true
-                startBLEScan(bluetoothLeScanner, context) { result ->
-                    scanResults = scanResults + result
-                }
-            }
-        } else {
-            permissionsGranted = true
-            startBLEScan(bluetoothLeScanner, context) { result ->
-                scanResults = scanResults + result
-            }
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Wrapper Box for positioning LogoutButton
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            LogoutButton(onLogoutClick = onLogoutClick)
-        }
-
-        // Main content displayed below the logout button
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp)
-        ) {
-            if (permissionsGranted) {
-                Text(text = "Scanning for smell sensor...")
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Display the scan results
-                scanResults.forEach { deviceInfo ->
-                    Text(text = deviceInfo)
-                }
-            } else if (permissionsDeniedText.isNotEmpty()) {
-                Text(text = permissionsDeniedText)
-            }
-        }
-    }
-}
-
-// Function to start BLE scan with permission check
-private fun startBLEScan(
-    bluetoothLeScanner: BluetoothLeScanner?,
-    context: Context,
-    onDeviceFound: (String) -> Unit
-) {
-    if (bluetoothLeScanner == null) {
-        Log.d("SmellDataScreen", "Bluetooth scanner not available.")
-        return
-    }
-
-    // Check if we have the necessary permissions (for Android 12 and above)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val hasBluetoothConnectPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
-        val hasBluetoothScanPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
-
-        if (!hasBluetoothConnectPermission || !hasBluetoothScanPermission) {
-            Log.d("SmellDataScreen", "Missing Bluetooth permissions for scanning.")
-            return
-        }
-    }
-
-    // Callback for BLE scan results
-    val scanCallback = object : ScanCallback() {
-        // Inside the ScanCallback in startBLEScan function
-        override fun onScanResult(callbackType: Int, result: ScanResult) {
-            val device = result.device
-            val deviceName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                "Unknown"
-            } else {
-                device.name ?: "Unknown"
-            }
-
-            // Filter for "Smell Inspector"
-            if (deviceName == "Smell Inspector") {
-                val deviceInfo = "Device: $deviceName, Address: ${device.address}"
-                Log.d("SmellDataScreen", "Found device: $deviceInfo")
-                onDeviceFound(deviceInfo)  // Pass the device info to the composable
-
-                // Optionally, stop scanning once the device is found
-                bluetoothLeScanner.stopScan(this)
-            }
-        }
-
-
-        override fun onBatchScanResults(results: List<ScanResult>) {
-            results.forEach { result ->
-                val device = result.device
-                val deviceName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    "Unknown"
-                } else {
-                    device.name ?: "Unknown"
-                }
-                val deviceInfo = "Device: $deviceName, Address: ${device.address}"
-                Log.d("SmellDataScreen", "Found device: $deviceInfo")
-                onDeviceFound(deviceInfo)
-            }
-        }
-
-        override fun onScanFailed(errorCode: Int) {
-            Log.d("SmellDataScreen", "Scan failed with error code: $errorCode")
-        }
-    }
-
-    // Start the scan
-    bluetoothLeScanner.startScan(scanCallback)
-    Log.d("SmellDataScreen", "BLE scan started.")
-}
-
-*/
-/*
-import android.Manifest
-
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Context
-import android.content.pm.PackageManager
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import com.example.virtualgardner.ui.components.LogoutButton
-
-@Composable
-fun SmellDataScreen(onLogoutClick: () -> Unit) {
-    val context = LocalContext.current
-    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-    val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
-
-    // Permissions state
-    var permissionsGranted by remember { mutableStateOf(false) }
-    var permissionsDeniedText by remember { mutableStateOf("") }
-
-    // Request Bluetooth permissions
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions(),
-        onResult = { permissions ->
-            permissionsGranted = permissions.all { it.value }
-            if (permissionsGranted) {
-                startBLEScan(context, bluetoothAdapter)
-            } else {
-                permissionsDeniedText = "Bluetooth permissions are required to access the smell sensor."
-            }
-        }
-    )
-
-    LaunchedEffect(Unit) {
-        val missingPermissions = mutableListOf<String>()
-        val bluetoothConnectGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED
-        val bluetoothScanGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED
-        val fineLocationGranted = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-        Log.d("SmellDataScreen", "BLUETOOTH_CONNECT granted: $bluetoothConnectGranted")
-        Log.d("SmellDataScreen", "BLUETOOTH_SCAN granted: $bluetoothScanGranted")
-        Log.d("SmellDataScreen", "ACCESS_FINE_LOCATION granted: $fineLocationGranted")
-
-        if (!bluetoothConnectGranted) missingPermissions.add(Manifest.permission.BLUETOOTH_CONNECT)
-        if (!bluetoothScanGranted) missingPermissions.add(Manifest.permission.BLUETOOTH_SCAN)
-        if (!fineLocationGranted) missingPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-
-        if (missingPermissions.isNotEmpty()) {
-            Log.d("SmellDataScreen", "Requesting permissions: $missingPermissions")
-            requestPermissionLauncher.launch(missingPermissions.toTypedArray())
-        } else {
-            permissionsGranted = true
-            startBLEScan(context, bluetoothAdapter)
-        }
-    }
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Wrapper Box for positioning LogoutButton
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            LogoutButton(onLogoutClick = onLogoutClick)
-        }
-
-        // Main content displayed below the logout button
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp) // Add space below the logout button
-        ) {
-            if (permissionsGranted) {
-                Text(text = "Scanning for smell sensor...")
-                // Add more UI elements to display the data received from the device
-            } else if (permissionsDeniedText.isNotEmpty()) {
-                Text(text = permissionsDeniedText)
-            }
-        }
-    }
-}
-
-// Function to start BLE scan
-private fun startBLEScan(context: Context, bluetoothAdapter: BluetoothAdapter?) {
-    // Ensure Bluetooth is supported on the device
-    if (bluetoothAdapter == null) {
-        Log.d("SmellDataScreen", "Bluetooth not supported on this device.")
-        return
-    }
-    Log.d("SmellDataScreen", "Starting BLE scan...")
-    // Proceed with Bluetooth scanning (to be implemented next)
-}
-
-
-     */
