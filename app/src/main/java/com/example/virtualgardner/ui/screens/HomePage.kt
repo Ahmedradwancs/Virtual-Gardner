@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.virtualgardner.R
+import com.example.virtualgardner.ui.components.LogoutButton
 import com.example.virtualgardner.ui.theme.VirtualGardnerTheme
 import com.example.virtualgardner.ui.theme.gradient
 import java.text.SimpleDateFormat
@@ -29,15 +31,32 @@ fun HomePageScreen(
     onMoistureClick: () -> Unit,
     onSmellDataClick: () -> Unit,
     onEnvironmentalClick: () -> Unit,
-    onLocationClick: () -> Unit
+    onLocationClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     VirtualGardnerTheme {
-        HomePageContent(
-            onMoistureClick = onMoistureClick,
-            onSmellDataClick = onSmellDataClick,
-            onEnvironmentalClick = onEnvironmentalClick,
-            onLocationClick = onLocationClick
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(gradient)
+        ) {
+            // Main content of the Home Page
+            HomePageContent(
+                onMoistureClick = onMoistureClick,
+                onSmellDataClick = onSmellDataClick,
+                onEnvironmentalClick = onEnvironmentalClick,
+                onLocationClick = onLocationClick
+            )
+
+            // Wrapper Box for positioning LogoutButton
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.TopEnd)
+            ) {
+                LogoutButton(onLogoutClick = onLogoutClick)
+            }
+        }
     }
 }
 
@@ -52,7 +71,7 @@ fun HomePageContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(12.dp)
+            .padding(horizontal = 16.dp, vertical = 64.dp) // Add vertical padding to position content lower
             .background(gradient),  // Apply the gradient as the background
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -109,26 +128,17 @@ fun HomePageContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Status Sections (Moisture, Smell, Environmental, Location)
-        StatusSection(
-            title = "Moisture Status",
-            imageResId = R.drawable.icon2,  // Replace with your actual icon (uploaded icon1)
-            onClick = onMoistureClick
-        )
         StatusSection(
             title = "Smell Detection",
             imageResId = R.drawable.smell,  // Replace with your actual icon (uploaded icon2)
             onClick = onSmellDataClick
         )
+
+
         StatusSection(
             title = "Environmental Status",
             imageResId = R.drawable.temp,  // Replace with your actual icon (uploaded icon3)
             onClick = onEnvironmentalClick
-        )
-        StatusSection(
-            title = "Location Status",
-            imageResId = R.drawable.location,  // Replace with your actual icon (uploaded icon4)
-            onClick = onLocationClick
         )
     }
 }

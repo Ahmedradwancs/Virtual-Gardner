@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.virtualgardner.ui.screens.EnvironmentalStatusScreen
+
 import com.example.virtualgardner.ui.screens.HomePageScreen
 import com.example.virtualgardner.ui.screens.LocationStatusScreen
 import com.example.virtualgardner.ui.screens.MoistureStatusScreen
@@ -14,6 +14,9 @@ import com.example.virtualgardner.ui.screens.RegisterScreen
 import com.example.virtualgardner.ui.screens.WelcomeScreen
 import com.google.firebase.auth.FirebaseAuth
 
+import com.example.virtualgardner.ui.screens.PlantMonitoringUI
+
+
 @Composable
 fun MyAppNavHost(
     startDestination: String,
@@ -21,7 +24,15 @@ fun MyAppNavHost(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = startDestination) {
+    // Define the logout function
+    val onLogoutClick: () -> Unit = {
+        auth.signOut()
+        navController.navigate("welcome") {
+            popUpTo("home") { inclusive = true } // Ensures all screens are removed from the back stack
+        }
+    }
+
+        NavHost(navController, startDestination = startDestination) {
         composable("welcome") {
             WelcomeScreen(
                 onSignInClick = { navController.navigate("login") },
@@ -56,24 +67,18 @@ fun MyAppNavHost(
                 onMoistureClick = { navController.navigate("moisture") },
                 onSmellDataClick = { navController.navigate("smell") },
                 onEnvironmentalClick = { navController.navigate("environmental") },
-                onLocationClick = { navController.navigate("location") }
+                onLocationClick = { navController.navigate("location") },
+                onLogoutClick = onLogoutClick
             )
         }
 
-        composable("environmental") {
-            EnvironmentalStatusScreen()
-        }
-
-        composable("location") {
-            LocationStatusScreen()
-        }
-
-        composable("moisture") {
-            MoistureStatusScreen()
-        }
-
         composable("smell") {
-            SmellDataScreen()
+            SmellDataScreen(onLogoutClick = onLogoutClick)
         }
+
+        composable("environmental") {
+            PlantMonitoringUI(onLogoutClick = onLogoutClick)  // Use this function to show environmental sensor data
+        }
+
     }
 }
