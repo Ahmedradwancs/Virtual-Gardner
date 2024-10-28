@@ -21,27 +21,40 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.unit.Dp
 import com.example.virtualgardner.R
+import com.example.virtualgardner.ui.components.LogoutButton
+import com.example.virtualgardner.ui.theme.gradient
 import com.example.virtualgardner.ui.viewmodels.SensorDataViewModel
 
 @Composable
-fun PlantMonitoringUI(viewModel: SensorDataViewModel = remember { SensorDataViewModel() }) {
+fun PlantMonitoringUI(
+    viewModel: SensorDataViewModel = remember { SensorDataViewModel() },
+    onLogoutClick: () -> Unit
+
+) {
     val humidityData by viewModel.humidity.collectAsState()
     val soilData by viewModel.soil.collectAsState()
     val temperatureData by viewModel.temperature.collectAsState()
     val locationData by viewModel.location.collectAsState()
 
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradient),  // background
+
+    ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFCBD8B5))
-            .padding(16.dp)
+            .padding(top = 64.dp) // Add vertical padding to position content lower
+            .background(gradient)
     ) {
         // Header Section
         Text(
             text = "Plant Monitoring Dashboard",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF4C4C4C),
+            color = Color(0xFFF5F5DC),
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
         )
         Text(
@@ -97,6 +110,15 @@ fun PlantMonitoringUI(viewModel: SensorDataViewModel = remember { SensorDataView
                     cardHeight = 180.dp
                 )
             }
+        }
+    }
+        // Wrapper Box for positioning LogoutButton
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.TopEnd)
+        ) {
+            LogoutButton(onLogoutClick = onLogoutClick)
         }
     }
 }
@@ -163,5 +185,5 @@ fun MonitoringCard(
 @Preview
 @Composable
 fun PlantMonitoringUIPreview() {
-    PlantMonitoringUI()
+    PlantMonitoringUI(onLogoutClick = {})
 }

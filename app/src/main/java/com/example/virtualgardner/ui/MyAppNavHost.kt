@@ -72,20 +72,13 @@ fun MyAppNavHost(
             )
         }
 
-        composable("environmental") {
-            PlantMonitoringUI()  // Use this function to show environmental sensor data
-        }
-
-        composable("location") {
-            LocationStatusScreen()
-        }
-
-        composable("moisture") {
-            MoistureStatusScreen()
-        }
-
         composable("smell") {
-            SmellDataScreen()
+            SmellDataScreen(onLogoutClick = onLogoutClick)
         }
+
+        composable("environmental") {
+            PlantMonitoringUI(onLogoutClick = onLogoutClick)  // Use this function to show environmental sensor data
+        }
+
     }
 }

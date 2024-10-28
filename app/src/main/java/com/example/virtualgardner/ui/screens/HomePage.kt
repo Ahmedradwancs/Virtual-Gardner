@@ -71,7 +71,7 @@ fun HomePageContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(12.dp)
+            .padding(horizontal = 16.dp, vertical = 64.dp) // Add vertical padding to position content lower
             .background(gradient),  // Apply the gradient as the background
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -128,26 +128,17 @@ fun HomePageContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Status Sections (Moisture, Smell, Environmental, Location)
-        StatusSection(
-            title = "Moisture Status",
-            imageResId = R.drawable.icon2,  // Replace with your actual icon (uploaded icon1)
-            onClick = onMoistureClick
-        )
         StatusSection(
             title = "Smell Detection",
             imageResId = R.drawable.smell,  // Replace with your actual icon (uploaded icon2)
             onClick = onSmellDataClick
         )
+
+
         StatusSection(
             title = "Environmental Status",
             imageResId = R.drawable.temp,  // Replace with your actual icon (uploaded icon3)
             onClick = onEnvironmentalClick
-        )
-        StatusSection(
-            title = "Location Status",
-            imageResId = R.drawable.location,  // Replace with your actual icon (uploaded icon4)
-            onClick = onLocationClick
         )
     }
 }
