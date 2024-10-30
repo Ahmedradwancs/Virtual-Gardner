@@ -47,7 +47,7 @@ fun PlantMonitoringUI(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 64.dp) // Add vertical padding to position content lower
-          
+
     ) {
         // Header Section
         Text(
