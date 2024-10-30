@@ -443,7 +443,7 @@ fun SmellDataScreen(onLogoutClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Green Metrics", fontSize = 24.sp, color = Color.White)
+            Text(text = "Growth Insight", fontSize = 24.sp, color = Color.White)
             LogoutButton(onLogoutClick = onLogoutClick)
 
 
