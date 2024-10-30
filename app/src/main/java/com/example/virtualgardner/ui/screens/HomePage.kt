@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,53 +39,52 @@ fun HomePageScreen(
                 .fillMaxSize()
                 .background(gradient)
         ) {
-            // Main content of the Home Page
             HomePageContent(
                 onMoistureClick = onMoistureClick,
                 onSmellDataClick = onSmellDataClick,
                 onEnvironmentalClick = onEnvironmentalClick,
-                onLocationClick = onLocationClick
+                onLocationClick = onLocationClick,
+                onLogoutClick = onLogoutClick
             )
-
-            // Wrapper Box for positioning LogoutButton
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.TopEnd)
-            ) {
-                LogoutButton(onLogoutClick = onLogoutClick)
-            }
         }
     }
 }
-
 @Composable
 fun HomePageContent(
     onMoistureClick: () -> Unit,
     onSmellDataClick: () -> Unit,
     onEnvironmentalClick: () -> Unit,
-    onLocationClick: () -> Unit
+    onLocationClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 64.dp) // Add vertical padding to position content lower
-            .background(gradient),  // Apply the gradient as the background
+            .padding(horizontal = 16.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Header: User Dashboard
-        Text(
-            text = "User Dashboard",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(16.dp),
-            color = Color(0xFF4C4C4C)
-        )
+        // Row for User Dashboard and Logout Button, adjusted for alignment
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 16.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "User Dashboard",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF4C4C4C)
+            )
+
+            Spacer(modifier = Modifier.weight(1f)) // Pushes LogoutButton to the right
+
+            LogoutButton(onLogoutClick = onLogoutClick)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Image (Main Dashboard Image)
         Image(
             painter = painterResource(id = R.drawable.smart),  // Replace with your image
             contentDescription = "Dashboard Image",
@@ -96,7 +94,9 @@ fun HomePageContent(
                 .height(150.dp)
         )
 
-        // Welcome text
+        // Add extra padding between the image and "Welcome to Virtual Gardener"
+        Spacer(modifier = Modifier.height(16.dp)) // Adjust padding as needed
+
         Text(
             text = "Welcome to Virtual Gardener",
             fontSize = 24.sp,
@@ -105,7 +105,6 @@ fun HomePageContent(
             modifier = Modifier.padding(top = 8.dp)
         )
 
-        // Date and Time
         val currentDate = SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault()).format(Date())
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -118,7 +117,6 @@ fun HomePageContent(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        // Additional information text
         Text(
             text = "Ready to nurture your garden today? Stay updated with real-time sensor data and weather alerts to keep your plants thriving.",
             fontSize = 16.sp,
@@ -130,18 +128,18 @@ fun HomePageContent(
 
         StatusSection(
             title = "Smell Detection",
-            imageResId = R.drawable.smell,  // Replace with your actual icon (uploaded icon2)
+            imageResId = R.drawable.smell,
             onClick = onSmellDataClick
         )
 
-
         StatusSection(
             title = "Environmental Status",
-            imageResId = R.drawable.temp,  // Replace with your actual icon (uploaded icon3)
+            imageResId = R.drawable.temp,
             onClick = onEnvironmentalClick
         )
     }
 }
+
 
 @Composable
 fun StatusSection(title: String, imageResId: Int, onClick: () -> Unit) {
@@ -157,7 +155,7 @@ fun StatusSection(title: String, imageResId: Int, onClick: () -> Unit) {
             contentDescription = title,
             contentScale = ContentScale.Fit,  // Make sure the image is scaled properly
             modifier = Modifier
-                .size(64.dp)   // Adjust to make all icons 128x128 dp (adjust as needed)
+                .size(64.dp)
                 .padding(8.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
