@@ -1,5 +1,6 @@
 package com.example.virtualgardner.ui
 
+import PlantMonitoringUI
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,7 +15,6 @@ import com.example.virtualgardner.ui.screens.RegisterScreen
 import com.example.virtualgardner.ui.screens.WelcomeScreen
 import com.google.firebase.auth.FirebaseAuth
 
-import com.example.virtualgardner.ui.screens.PlantMonitoringUI
 
 
 @Composable
