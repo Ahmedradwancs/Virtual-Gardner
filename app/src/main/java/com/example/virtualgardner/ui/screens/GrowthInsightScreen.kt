@@ -1,6 +1,7 @@
 package com.example.virtualgardner.ui.screens
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.virtualgardner.ui.theme.gradient
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
@@ -59,7 +61,9 @@ fun GrowthInsightScreen(humidity: String, temperature: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .background(gradient)
+            .padding(16.dp)
+            ,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Title
