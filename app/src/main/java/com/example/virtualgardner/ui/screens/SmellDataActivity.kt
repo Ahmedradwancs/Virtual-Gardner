@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.virtualgardner.ui.components.LogoutButton
 import java.util.*
+import com.example.virtualgardner.ui.screens.GrowthInsightScreen
+
 import androidx.compose.ui.unit.sp
 
 
@@ -96,26 +98,12 @@ fun SmellDataScreen(onLogoutClick: () -> Unit) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Wrapper Box for positioning LogoutButton
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            LogoutButton(onLogoutClick = onLogoutClick)
-        }
+        // Display GrowthInsightScreen with real-time data
+        GrowthInsightScreen(
+            humidity = humidityData,
+            temperature = temperatureData
+        )
 
-        // Display Temperature and Humidity readings
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Temperature: $temperatureData °C", fontSize = 24.sp, modifier = Modifier.padding(8.dp))
-            Text(text = "Humidity: $humidityData %", fontSize = 24.sp, modifier = Modifier.padding(8.dp))
-        }
     }
 }
 
