@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -36,29 +37,33 @@ import com.example.virtualgardner.MainActivity
 // Define the thresholds
 const val HUMIDITY_THRESHOLD = 45
 const val TEMPERATURE_THRESHOLD = 25
+const val SOIL_MOISTURE_THRESHOLD = 50
 
 @Composable
 fun MonitorAndNotify(
     context: Context,
     humidity: String,
-    temperature: String
+    temperature: String,
+    soil: String
 ) {
     LaunchedEffect(humidity, temperature) {
         // Convert humidity and temperature to integer values if not null
         val humidityInt = humidity.toIntOrNull() ?: 0
         val temperatureInt = temperature.toIntOrNull() ?: 0
+        val soilMoistureInt = soil.toIntOrNull() ?: 0
 
         // Check if humidity or temperature exceeds the thresholds
-        if (humidityInt > HUMIDITY_THRESHOLD || temperatureInt > TEMPERATURE_THRESHOLD) {
+        if (humidityInt > HUMIDITY_THRESHOLD || temperatureInt > TEMPERATURE_THRESHOLD || soilMoistureInt < SOIL_MOISTURE_THRESHOLD) {
             showNotification(
                 context = context,
                 title = "Plant Alert",
-                message = "High levels detected! Humidity: $humidity%, Temperature: $temperature°C"
+                message = "High levels detected! Consider watering your plants."
             )
         }
     }
 }
 
+@SuppressLint("MissingPermission")
 fun showNotification(context: Context, title: String, message: String) {
     val channelId = "plant_monitoring_channel"
 
@@ -172,7 +177,7 @@ fun PlantMonitoringUI(
     val locationData by viewModel.location.collectAsState()
 
     // Call the MonitorAndNotify function here
-    MonitorAndNotify(context = context, humidity = humidityData, temperature = temperatureData)
+    MonitorAndNotify(context = context, humidity = humidityData, temperature = temperatureData, soil = soilData)
 
     Box(
         modifier = Modifier
