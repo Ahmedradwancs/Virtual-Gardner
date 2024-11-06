@@ -1,3 +1,5 @@
+// components/LogoutButton.kt
+
 package com.example.virtualgardner.ui.components
 
 import androidx.compose.material3.Button

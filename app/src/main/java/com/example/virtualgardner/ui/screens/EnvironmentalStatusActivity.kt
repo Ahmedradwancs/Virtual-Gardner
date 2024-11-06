@@ -1,3 +1,5 @@
+// ui/screens/EnvironmentalStatusActivity.kt
+
 package com.example.virtualgardner.ui.screens
 
 import androidx.compose.foundation.Image
@@ -12,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,99 +28,95 @@ import com.example.virtualgardner.ui.viewmodels.SensorDataViewModel
 
 @Composable
 fun PlantMonitoringUI(
+    location: String, // Accept location parameter here
     viewModel: SensorDataViewModel = remember { SensorDataViewModel() },
-    onLogoutClick: () -> Unit
 
 ) {
     val humidityData by viewModel.humidity.collectAsState()
     val soilData by viewModel.soil.collectAsState()
     val temperatureData by viewModel.temperature.collectAsState()
-    val locationData by viewModel.location.collectAsState()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(gradient),  // background
-
+            .background(gradient)  // background
     ) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 64.dp) // Add vertical padding to position content lower
-
-    ) {
-        // Header Section
-        Text(
-            text = "Plant Monitoring Dashboard",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFF5F5DC),
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
-        )
-        Text(
-            text = "The real-time health and status of your plants with live sensor data.",
-            fontSize = 18.sp,
-            color = Color.DarkGray,
-            modifier = Modifier.padding(bottom = 20.dp)        )
-
-        // Cards Section with increased height for each card
-        LazyColumn(
+        Column(
             modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(top = 64.dp) // Add vertical padding to position content lower
         ) {
-            item {
-                MonitoringCard(
-                    titleIcon = R.drawable.humidity,
-                    title = "Humidity Report",
-                    data = "Humidity: ${humidityData ?: "N/A"}%",
-                    dataIcon = R.drawable.humidity,
-                    cardHeight = 150.dp
-                )
-            }
+            // Header Section
+            Text(
+                text = "Plant Monitoring Dashboard",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFF5F5DC),
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+            )
+            Text(
+                text = "The real-time health and status of your plants with live sensor data.",
+                fontSize = 18.sp,
+                color = Color.DarkGray,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
 
-            item {
-                MonitoringCard(
-                    titleIcon = R.drawable.moisture,
-                    title = "Soil Moisture Data",
-                    data = "Soil Moisture: ${soilData ?: "N/A"}%",
-                    dataIcon = R.drawable.moisture,
-                    cardHeight = 150.dp
-                )
-            }
+            // Cards Section with increased height for each card
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    MonitoringCard(
+                        titleIcon = R.drawable.humidity,
+                        title = "Humidity Report",
+                        data = "Humidity: ${humidityData ?: "N/A"}%",
+                        dataIcon = R.drawable.humidity,
+                        cardHeight = 150.dp
+                    )
+                }
 
-            item {
-                MonitoringCard(
-                    titleIcon = R.drawable.temperature,
-                    title = "Temperature Data",
-                    data = "Temperature: ${temperatureData ?: "N/A"}°C",
-                    dataIcon = R.drawable.temp,
-                    cardHeight = 150.dp
-                )
-            }
+                item {
+                    MonitoringCard(
+                        titleIcon = R.drawable.moisture,
+                        title = "Soil Moisture Data",
+                        data = "Soil Moisture: ${soilData ?: "N/A"}%",
+                        dataIcon = R.drawable.moisture,
+                        cardHeight = 150.dp
+                    )
+                }
 
-            item {
-                MonitoringCard(
-                    titleIcon = R.drawable.location,
-                    title = "Location",
-                    data = locationData ?: "Location not available",
-                    dataIcon = R.drawable.location,
-                    cardHeight = 180.dp
-                )
+                item {
+                    MonitoringCard(
+                        titleIcon = R.drawable.temperature,
+                        title = "Temperature Data",
+                        data = "Temperature: ${temperatureData ?: "N/A"}°C",
+                        dataIcon = R.drawable.temp,
+                        cardHeight = 150.dp
+                    )
+                }
+
+                item {
+                    MonitoringCard(
+                        titleIcon = R.drawable.location,
+                        title = "Location",
+                        data = location, // Display the real-time location here
+                        dataIcon = R.drawable.location,
+                        cardHeight = 180.dp
+                    )
+                }
             }
         }
-    }
+
         // Wrapper Box for positioning LogoutButton
         Box(
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.TopEnd)
-        ) {
-            LogoutButton(onLogoutClick = onLogoutClick)
-        }
+        )
     }
 }
 
@@ -182,8 +179,8 @@ fun MonitoringCard(
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun PlantMonitoringUIPreview() {
-    PlantMonitoringUI(onLogoutClick = {})
-}
+    PlantMonitoringUI(location = "Storgatan 96, Kristianstad, Skåne Lan 29526", onLogoutClick = {})
+}*/

@@ -1,3 +1,5 @@
+// ui/screens/LocationStatusActivity.kt
+
 package com.example.virtualgardner.ui.screens
 
 import androidx.compose.material3.Text

@@ -1,3 +1,5 @@
+// ui/screens/WelcomeScreen.kt
+
 package com.example.virtualgardner.ui.screens
 
 import androidx.compose.foundation.Image

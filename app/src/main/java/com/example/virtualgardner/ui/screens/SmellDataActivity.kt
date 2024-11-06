@@ -1,3 +1,5 @@
+// ui/screens/SmellDataActivity.kt
+
 package com.example.virtualgardner.ui.screens
 
 
