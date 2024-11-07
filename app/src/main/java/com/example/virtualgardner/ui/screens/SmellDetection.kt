@@ -19,10 +19,10 @@ import com.example.virtualgardner.ui.theme.gradient
 
 @Composable
 fun SmellDetectionScreen() {
-    SmellDetectionScreen()
+    SmellDetectionPage()
 }
 @Composable
-fun SmellDetection() {
+fun SmellDetectionPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
