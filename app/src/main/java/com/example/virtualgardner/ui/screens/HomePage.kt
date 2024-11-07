@@ -35,7 +35,7 @@ fun HomePageScreen(
     onMoistureClick: () -> Unit,
     onSmellDataClick: () -> Unit,
     onEnvironmentalClick: () -> Unit,
-    onLocationClick: () -> Unit,
+    onSmellDetectionClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     VirtualGardnerTheme {
@@ -47,7 +47,7 @@ fun HomePageScreen(
             HomePageContent(
                 onSmellDataClick = onSmellDataClick,
                 onEnvironmentalClick = onEnvironmentalClick,
-                onSmellDetectionClick = onLocationClick,
+                onSmellDetectionClick = onSmellDetectionClick,
                 onLogoutClick = onLogoutClick
             )
         }
@@ -86,10 +86,11 @@ fun HomePageContent(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
         // make a bit roundeded image
 
         Image(
-            painter = painterResource(id = R.drawable.smart),  // Replace with your image
+            painter = painterResource(id = R.drawable.smart),
             contentDescription = "Dashboard Image",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
@@ -188,7 +189,7 @@ fun HomePageScreenPreview() {
         onMoistureClick = {},
         onSmellDataClick = {},
         onEnvironmentalClick = {},
-        onLocationClick = {},
+        onSmellDetectionClick = {},
         onLogoutClick = {}
     )
 }

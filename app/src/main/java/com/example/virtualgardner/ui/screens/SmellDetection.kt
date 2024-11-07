@@ -1,4 +1,4 @@
-// ui/screens/LocationStatusActivity.kt
+// ui/screens/SmellDetection.kt
 
 package com.example.virtualgardner.ui.screens
 
@@ -6,11 +6,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun LocationStatusScreen() {
-    LocationStatusPage()
+fun SmellDetectionScreen() {
+    SmellDetectionPage()
 }
 
 @Composable
-fun LocationStatusPage() {
+fun SmellDetectionPage() {
     Text(text = "Welcome to the Location Status Page")
 }
