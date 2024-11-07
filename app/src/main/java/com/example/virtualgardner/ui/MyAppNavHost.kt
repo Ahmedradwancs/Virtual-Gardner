@@ -64,7 +64,7 @@ fun MyAppNavHost(
                 onMoistureClick = { navController.navigate("moisture") },
                 onSmellDataClick = { navController.navigate("smell") },
                 onEnvironmentalClick = { navController.navigate("environmental") },
-                onLocationClick = { navController.navigate("location") },
+                onSmellDetectionClick = { navController.navigate("smellDetection") },
                 onLogoutClick = onLogoutClick
             )
         }
@@ -78,8 +78,8 @@ fun MyAppNavHost(
             SmellDataScreen(onLogoutClick = onLogoutClick)
         }
 
-        composable("location") {
-            LocationStatusScreen()
+        composable("smellDetection") {
+            SmellDetectionScreen()
         }
 
         composable("environmental") {

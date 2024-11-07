@@ -18,11 +18,11 @@ import com.example.virtualgardner.R
 import com.example.virtualgardner.ui.theme.gradient
 
 @Composable
-fun SmellDataScreen() {
-    SmellDataPage()
+fun SmellDetectionScreen() {
+    SmellDetectionScreen()
 }
 @Composable
-fun SmellDataPage() {
+fun SmellDetection() {
     Column(
         modifier = Modifier
             .fillMaxSize()
