@@ -1,3 +1,5 @@
+// ui/screens/LoginScreen.kt
+
 package com.example.virtualgardner.ui.screens
 
 import android.content.ContentValues.TAG

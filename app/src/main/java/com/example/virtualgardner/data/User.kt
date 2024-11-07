@@ -1,3 +1,5 @@
+// data/User
+
 package com.example.virtualgardner.data
 
 data class User(

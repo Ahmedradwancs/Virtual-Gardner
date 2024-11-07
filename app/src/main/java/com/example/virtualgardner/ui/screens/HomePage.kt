@@ -1,3 +1,5 @@
+// ui/screens/HomePage.kt
+
 package com.example.virtualgardner.ui.screens
 
 import androidx.compose.foundation.Image
@@ -5,17 +7,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.virtualgardner.R
@@ -30,7 +35,7 @@ fun HomePageScreen(
     onMoistureClick: () -> Unit,
     onSmellDataClick: () -> Unit,
     onEnvironmentalClick: () -> Unit,
-    onLocationClick: () -> Unit,
+    onSmellDetectionClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     VirtualGardnerTheme {
@@ -40,10 +45,9 @@ fun HomePageScreen(
                 .background(gradient)
         ) {
             HomePageContent(
-                onMoistureClick = onMoistureClick,
                 onSmellDataClick = onSmellDataClick,
                 onEnvironmentalClick = onEnvironmentalClick,
-                onLocationClick = onLocationClick,
+                onSmellDetectionClick = onSmellDetectionClick,
                 onLogoutClick = onLogoutClick
             )
         }
@@ -51,10 +55,9 @@ fun HomePageScreen(
 }
 @Composable
 fun HomePageContent(
-    onMoistureClick: () -> Unit,
     onSmellDataClick: () -> Unit,
     onEnvironmentalClick: () -> Unit,
-    onLocationClick: () -> Unit,
+    onSmellDetectionClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     Column(
@@ -68,7 +71,7 @@ fun HomePageContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp, end = 16.dp, bottom = 8.dp),
+                .padding(start = 24.dp, end = 16.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -78,20 +81,22 @@ fun HomePageContent(
                 color = Color(0xFF4C4C4C)
             )
 
-            Spacer(modifier = Modifier.weight(1f)) // Pushes LogoutButton to the right
-
+            Spacer(modifier = Modifier.weight(1f))
             LogoutButton(onLogoutClick = onLogoutClick)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // make a bit roundeded image
+
         Image(
-            painter = painterResource(id = R.drawable.smart),  // Replace with your image
+            painter = painterResource(id = R.drawable.smart),
             contentDescription = "Dashboard Image",
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.FillWidth,
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .height(150.dp)
+                .fillMaxWidth()
+                .height(230.dp)
+                .clip(shape = RoundedCornerShape(16.dp))
         )
 
         // Add extra padding between the image and "Welcome to Virtual Gardener"
@@ -127,16 +132,24 @@ fun HomePageContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         StatusSection(
-            title = "Smell Detection",
-            imageResId = R.drawable.smell,
+            title = "Environmental Status",
+            imageResId = R.drawable.icon2,
+            onClick = onEnvironmentalClick
+        )
+
+        StatusSection(
+            title = "Smell Inspector Data",
+            imageResId = R.drawable.smell_inspector_icon,
             onClick = onSmellDataClick
         )
 
         StatusSection(
-            title = "Environmental Status",
-            imageResId = R.drawable.temp,
-            onClick = onEnvironmentalClick
+            title = "Smell Detection",
+            imageResId = R.drawable.smell,
+            onClick = onSmellDetectionClick
         )
+
+
     }
 }
 
@@ -166,4 +179,17 @@ fun StatusSection(title: String, imageResId: Int, onClick: () -> Unit) {
             color = Color(0xFFF5F5DC)
         )
     }
+}
+
+// Preview the HomePageScreen
+@Preview
+@Composable
+fun HomePageScreenPreview() {
+    HomePageScreen(
+        onMoistureClick = {},
+        onSmellDataClick = {},
+        onEnvironmentalClick = {},
+        onSmellDetectionClick = {},
+        onLogoutClick = {}
+    )
 }

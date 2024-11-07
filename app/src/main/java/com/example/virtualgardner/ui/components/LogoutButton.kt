@@ -1,24 +1,35 @@
+// components/LogoutButton.kt
+
 package com.example.virtualgardner.ui.components
 
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.virtualgardner.ui.theme.BtnColor
+import androidx.compose.ui.unit.dp
+import com.example.virtualgardner.R
 
 @Composable
 fun LogoutButton(onLogoutClick: () -> Unit) {
-    Button(
-        onClick = onLogoutClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = BtnColor
-        ),
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .size(40.dp) // Adjust size for a larger clickable area
+            .clickable(onClick = onLogoutClick) // Use onClick parameter directly
     ) {
-        Text("Logout")
+        Image(
+            painter = painterResource(id = R.drawable.logouticon),
+            contentDescription = "Logout",
+            modifier = Modifier.size(32.dp)
+        )
     }
 }
+
 
 @Preview
 @Composable

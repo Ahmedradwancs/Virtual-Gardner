@@ -65,6 +65,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
+    // Notification
+    implementation(libs.androidx.core.ktx.v220)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -95,6 +98,9 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.volley)
     implementation(libs.gson)
+
+    // Google Play Services Location for accessing location services
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
 
 }
