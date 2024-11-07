@@ -167,14 +167,14 @@ fun MonitoringCard(
 @Composable
 fun PlantMonitoringUI(
     viewModel: SensorDataViewModel = remember { SensorDataViewModel() },
-    onLogoutClick: () -> Unit
+    location: String
+
 ) {
     val context = LocalContext.current  // Obtain the context here
 
     val humidityData by viewModel.humidity.collectAsState()
     val soilData by viewModel.soil.collectAsState()
     val temperatureData by viewModel.temperature.collectAsState()
-    val locationData by viewModel.location.collectAsState()
 
     // Call the MonitorAndNotify function here
     MonitorAndNotify(context = context, humidity = humidityData, temperature = temperatureData, soil = soilData)
@@ -184,32 +184,28 @@ fun PlantMonitoringUI(
             .fillMaxSize()
             .background(gradient)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp)
-        ) {
-            Text(
-                text = "Plant Monitoring Dashboard",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFFF5F5DC),
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
-            )
-            Text(
-                text = "The real-time health and status of your plants with live sensor data.",
-                fontSize = 18.sp,
-                color = Color.DarkGray,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1f),
+                    .padding(18.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                item{
+                    Text(
+                        text = "Plant Monitoring Dashboard",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFF5F5DC),
+                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                    )
+                    Text(
+                        text = "The real-time health and status of your plants with live sensor data.",
+                        fontSize = 18.sp,
+                        color = Color.DarkGray,
+                        modifier = Modifier.padding(bottom = 20.dp, start = 16.dp)
+                    )
+                }
                 item {
                     MonitoringCard(
                         titleIcon = R.drawable.humidity,
@@ -244,21 +240,12 @@ fun PlantMonitoringUI(
                     MonitoringCard(
                         titleIcon = R.drawable.location,
                         title = "Location",
-                        data = locationData ?: "Location not available",
+                        data = location ?: "Location not available",
                         dataIcon = R.drawable.location,
                         cardHeight = 180.dp
                     )
                 }
             }
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.TopEnd)
-        ) {
-            LogoutButton(onLogoutClick = onLogoutClick)
-        }
     }
 }
 
@@ -266,5 +253,5 @@ fun PlantMonitoringUI(
 @Preview
 @Composable
 fun PlantMonitoringUIPreview() {
-    PlantMonitoringUI(viewModel = SensorDataViewModel(), onLogoutClick = {})
+    PlantMonitoringUI(viewModel = SensorDataViewModel(), location = "Fetching location...")
 }
